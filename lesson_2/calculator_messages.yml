@@ -1,0 +1,20 @@
+en:
+  welcome: "Welcome to Calculator! Enter your name: "
+  input_name: "please input your name: "
+  hello_name: "hello %s"
+  input_number1: "please input first number: "
+  input_number2: "please input second number: "
+  error_number: "hmm... please check your number if it's valid"
+  operator_message: >
+    what operation would you like to perform?
+    1) add
+    2) substract
+    3) multiply
+    4) divide
+  error_operator: "please input number for 1 or 2 or 3 or 4."
+  operating: "%s the two numbers... "
+  result: "the result is %s"
+  continue: "do you want do another calculation? y) calculate again"
+  ending: "thanks for using this calculator"
+tw:
+  welcome: "歡迎使用計算機！ 請輸入您的名字："
