@@ -9,7 +9,7 @@ def find_factor(number)
     factor << number / divide if number % divide == 0
     divide -= 1
   end
-  p factor
+  factor
 end
 
 puts "input: "
