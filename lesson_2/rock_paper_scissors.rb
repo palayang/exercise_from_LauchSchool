@@ -4,17 +4,19 @@ def prompt(input)
   puts "=> #{input}"
 end
 
-def display_results(player, computer)
+
+
+def return_results(player, computer)
     if (player == 'rock' && computer == 'scissors') ||
       (player == 'scissors' && computer == 'paper') ||
       (player == 'paper' && computer == 'rock')
-    prompt "You won!"
+    return "You won!"
   elsif(player == 'rock' && computer == 'paper') ||
       (player == 'scissors' && computer == 'rock') ||
       (player == 'paper' && computer == 'scissors')
-    prompt "Computer won!"
+    return "Computer won!"
   else
-    prompt "It's a tie"
+    return "It's a tie"
   end
 end
 
@@ -35,7 +37,8 @@ loop do
 
   prompt("your choice is #{user_choice}, and computer choice is #{computer_choice}")
 
-  display_results(user_choice, computer_choice)
+  result = return_results(user_choice, computer_choice)
+  prompt("#{result}")
 
   prompt("Do you want to play again? y) yes, n) no")
   answer = gets.chomp
