@@ -14,4 +14,4 @@ end
 
 puts "input: "
 input = gets.chomp.to_i
-find_factor input
+puts "#{find_factor input}"
