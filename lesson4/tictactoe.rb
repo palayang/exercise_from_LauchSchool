@@ -11,10 +11,9 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
-def joinor(ary)
-  return_ary = ary
-  return_ary[return_ary.length - 1] = "or " + return_ary.last.to_s
-  return_ary
+def joinor(ary, delimiter = ', ', word = 'or')
+  ary[-1] = "#{word} #{ary.last}" if ary.size > 1
+  ary.size == 2 ? ary.join(' ') : ary.join(delimiter)
 end
 
 # rubocop:disable Metrics/AbcSize
@@ -44,7 +43,7 @@ end
 def player_places_piece!(brd)
   square = ''
   loop do
-    prompt "choose a square #{joinor(empty_squares(brd)).join(', ')}:"
+    prompt "choose a square #{joinor(empty_squares(brd))}:"
     square = gets.chomp.to_i
     if empty_squares(brd).include?(square)
       break
