@@ -75,9 +75,9 @@ end
 def detect_winner(brd)
   WINING_LINES.each do |lines|
     if brd.values_at(*lines).count(PLAYER_MARKER) == 3
-      return 'Player'
+      return 'player'
     elsif brd.values_at(*lines).count(COMPUTER_MARKER) == 3
-      return 'Computer'
+      return 'computer'
     end
   end
   nil
@@ -86,22 +86,36 @@ end
 # 1. keys => set range 1-9
 # 2. select => set range ' '
 loop do
-  board = initialize_board
+  record = { 'player' => 0, 'computer' => 0 }
   loop do
+    board = initialize_board
+    loop do
+      display_board(board)
+      player_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+      computer_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+    end
     display_board(board)
-    player_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-    computer_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-  end
-  display_board(board)
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "It is a tie!"
-  end
+    if someone_won?(board)
+      prompt "#{detect_winner(board)} won this time!"
+      record[detect_winner(board)] += 1
+    else
+      prompt "It is a tie this time!"
+    end
 
-  prompt "Do you want to play again? y) yes"
+    if !record.value?(5)
+      prompt "The winner is the first player who get 5 times win," \
+             " now player is #{record['player']} times win and" \
+             " computer is #{record['computer']} times win."
+    else
+      break
+    end
+    prompt "Press any key to continue this game!"
+    gets
+  end
+  prompt "The winner is #{record.key(5)}"
+  prompt "do you want to play again? y) yes"
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
