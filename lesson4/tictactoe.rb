@@ -59,8 +59,8 @@ def empty_squares(brd)
   brd.keys.select { |num| brd[num] == INITIAL_MARKER }
 end
 
-def computer_places_piece!(brd)
-  square = empty_squares(brd).sample
+def computer_places_piece!(brd, square = ' ')
+  square = empty_squares(brd).sample if square == ' '
   brd[square] = COMPUTER_MARKER
 end
 
@@ -70,6 +70,18 @@ end
 
 def someone_won?(brd)
   !!detect_winner(brd)
+end
+
+def computer_defense!(brd)
+  defense_square = ''
+  WINING_LINES.each do |lines|
+    if brd.values_at(*lines).count(PLAYER_MARKER) == 2
+      lines.each { |e| if brd[e] == INITIAL_MARKER then defense_square = e end}
+      computer_places_piece!(brd, defense_square)
+      break
+    end
+  end
+  computer_places_piece!(brd) if defense_square == ''
 end
 
 def detect_winner(brd)
@@ -93,7 +105,7 @@ loop do
       display_board(board)
       player_places_piece!(board)
       break if someone_won?(board) || board_full?(board)
-      computer_places_piece!(board)
+      computer_defense!(board)
       break if someone_won?(board) || board_full?(board)
     end
     display_board(board)
