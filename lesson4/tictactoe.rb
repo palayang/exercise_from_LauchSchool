@@ -59,8 +59,24 @@ def empty_squares(brd)
   brd.keys.select { |num| brd[num] == INITIAL_MARKER }
 end
 
-def computer_places_piece!(brd, square = ' ')
-  square = empty_squares(brd).sample if square == ' '
+def computer_places_piece!(brd)
+  square = nil
+  WINING_LINES.each do |lines|
+    square = find_at_risk_square(brd, lines, COMPUTER_MARKER)
+    break if square
+  end
+
+  if !square
+    WINING_LINES.each do |lines|
+      square = find_at_risk_square(brd, lines, PLAYER_MARKER)
+      break if square
+    end
+  end
+
+  if !square
+    brd[5] == INITIAL_MARKER ? square = 5 : square = empty_squares(brd).sample
+  end
+
   brd[square] = COMPUTER_MARKER
 end
 
@@ -72,16 +88,11 @@ def someone_won?(brd)
   !!detect_winner(brd)
 end
 
-def computer_defense!(brd)
-  defense_square = ''
-  WINING_LINES.each do |lines|
-    if brd.values_at(*lines).count(PLAYER_MARKER) == 2
-      lines.each { |e| if brd[e] == INITIAL_MARKER then defense_square = e end}
-      computer_places_piece!(brd, defense_square)
-      break
-    end
+def find_at_risk_square(brd, lines, mark)
+  if brd.values_at(*lines).count(mark) == 2
+    # lines.each { |e| if brd[e] == INITIAL_MARKER then defense_square = e end}
+    brd.select { |k, v| lines.include?(k) && v == INITIAL_MARKER }.keys.first
   end
-  computer_places_piece!(brd) if defense_square == ''
 end
 
 def detect_winner(brd)
@@ -97,15 +108,28 @@ end
 # empty_squares()
 # 1. keys => set range 1-9
 # 2. select => set range ' '
+
+def places_piece!(brd, player)
+  if player == "real_player"
+    player_places_piece!(brd)
+  else
+    computer_places_piece!(brd)
+  end
+end
+
+def alternate_player(player)
+  player == "computer" ? "real_player" : "computer"
+end
+
 loop do
   record = { 'player' => 0, 'computer' => 0 }
   loop do
     board = initialize_board
+    current_player = "real_player"
     loop do
       display_board(board)
-      player_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
-      computer_defense!(board)
+      places_piece!(board, current_player)
+      current_player = alternate_player(current_player)
       break if someone_won?(board) || board_full?(board)
     end
     display_board(board)
